@@ -1,12 +1,19 @@
 import React, { useEffect } from "react";
 
-function User({ user, onRemove, onToggle }) {
+const User = React.memo(function User({ user, onRemove, onToggle }) {
+  // mount, unmount, update 시.
   useEffect(() => {
-    console.log("컴포넌트가 화면에 나타남");
+    console.log("user 값이 설정됨");
+    console.log(user);
+
     return () => {
-      console.log("컴포넌트가 화면에서 사라짐");
+      // unmount 시 실행(= cleanup 함수)
+      console.log("user 가 바뀌기 전..");
+      console.log(user);
     };
-  }, []);
+  }, [user]);
+  // deps 배열을 비우게 되면 mount 시에만 해당 함수 호출
+  // deps 파라미터를 생략하면 컴포넌트가 리렌더링 될때마다 호출됨 (성능저하)
 
   return (
     <div>
@@ -23,7 +30,7 @@ function User({ user, onRemove, onToggle }) {
       <button onClick={() => onRemove(user.id)}>삭제</button>
     </div>
   );
-}
+});
 
 function UserList({ users, onRemove, onToggle }) {
   return (
@@ -40,4 +47,4 @@ function UserList({ users, onRemove, onToggle }) {
   );
 }
 
-export default UserList;
+export default React.memo(UserList);
